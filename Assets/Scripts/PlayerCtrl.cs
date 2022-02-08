@@ -30,8 +30,8 @@ public class PlayerCtrl : MonoBehaviour
         Application.targetFrameRate = 60;   
         QualitySettings.vSyncCount = 0;
 
-        moveSpeed = 7.0f;
-        JumpForce = 100;
+        moveSpeed = 5.0f;
+        JumpForce = 85;
         tr = GetComponent<Transform>();
         this.animator = GetComponent<Animator>();
         this.rigid2D = GetComponent<Rigidbody2D>();
@@ -45,8 +45,8 @@ public class PlayerCtrl : MonoBehaviour
         v = Input.GetAxis("Vertical");
 
         int key = 0;
-        if (Input.GetKey(KeyCode.RightArrow)) key = 1;
-        if (Input.GetKey(KeyCode.LeftArrow)) key = -1; 
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) key = 1;
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) key = -1; 
 
         if (key != 0)
         {
@@ -71,12 +71,20 @@ public class PlayerCtrl : MonoBehaviour
         {
             this.animator.SetTrigger("JumpTrigger");
 
-            moveDir = new Vector3(h, 2, 0);
+            moveDir = new Vector3(key, 1.5f, 0);
             if (1.0f < moveDir.magnitude)
                 moveDir.Normalize();
             transform.position += moveDir * JumpForce * Time.deltaTime;
-            //this.rigid2D.AddForce(transform.up * this.JumpForce);
         }
         //캐릭터 점프
+    }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if(coll.gameObject.name.Contains("Coin") == true)
+        {
+            GameMgr.Inst.AddGold();
+            Destroy(coll.gameObject);
+        }
     }
 }
