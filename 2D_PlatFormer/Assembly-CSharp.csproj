@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{7127607F-C81C-479C-72FA-FFA3175393A2}</ProjectGuid>
+    <ProjectGuid>{6D5D283C-56ED-A904-83EC-58F2429FB94B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -64,11 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GameMgr.cs" />
-    <Compile Include="Assets\Scripts\PlatformCtrl.cs" />
-    <Compile Include="Assets\Scripts\PlayerCtrl.cs" />
-    <Compile Include="Assets\Simple 2D Platformer BE2\ReadMe\Scripts\ReadmeBE2.cs" />
-    <None Include="Assets\Nature_pixel_art_assets\pixel_snapping_README.txt" />
+    <Compile Include="Assets\02_Scripts\GameMgr.cs" />
+    <Compile Include="Assets\02_Scripts\PlatformCtrl.cs" />
+    <Compile Include="Assets\02_Scripts\PlayerCtrl.cs" />
+    <Compile Include="Assets\02_Scripts\SkCtrl.cs" />
+    <Compile Include="Assets\04_Images\Simple 2D Platformer BE2\ReadMe\Scripts\ReadmeBE2.cs" />
+    <None Include="Assets\04_Images\Nature_pixel_art_assets\pixel_snapping_README.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/2019.4.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
@@ -607,31 +608,31 @@
       <HintPath>C:/Program Files/2019.4.1f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>
