@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//스킬 구현 중
-//플레이어 바라보는 방향벡터로 스킬 쏘기
-//플레이어 자식으로 생성되게 하지말고 따로 생성되게 바꿀 것
-//스킬에 콜리더를 넣어 몬스터와 충돌처리하게 할 것.
+//animation.crossfade 사용해서 매끄럽게 처리하기
 
 //몬스터 구현 중
-//몬스터 AI
-//layermask를 통해 아이템과 몬스터의 충돌 방지.
+//몬스터 위로 플레이가 움직이지 않도록 설정
+//몬스터랑 아이템 충돌되지 않게 설정
+//움직일 때 애니메이션 연결해주기
+//추적, 공격, 죽는 거 구현
+//죽고 나서 보상(점수, 골드, 아이템드롭) 구현
 
-//데미지, 보상, UI
+
+//데미지, 보상, UI, 사운드
 //게임 컨셉 부여하기
 //맵 디자인, 게임오버 화면
 
@@ -28,8 +29,7 @@ public class PlayerCtrl : MonoBehaviour
     float JumpForce = 0.0f;
     
     Animator animator;
-
-    [HideInInspector]public int key = 0; // 캐릭터의 방향
+    
     //캐릭터 이동 변수
 
     //캐릭터 스킬 변수
@@ -41,10 +41,11 @@ public class PlayerCtrl : MonoBehaviour
         Application.targetFrameRate = 60;   
         QualitySettings.vSyncCount = 0;
 
-        moveSpeed = 5.0f;
+        moveSpeed = 3.5f;
         JumpForce = 75;
         tr = GetComponent<Transform>();
         this.animator = GetComponent<Animator>();
+        
         this.rigid2D = GetComponent<Rigidbody2D>();
     }
 
@@ -55,9 +56,9 @@ public class PlayerCtrl : MonoBehaviour
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
 
-        
+        int key = 0;
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) key = 1;
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) key = -1; 
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) key = -1;
 
         if (key != 0)
         {
@@ -93,7 +94,7 @@ public class PlayerCtrl : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F))
         {
             GameObject a_SkObj = (GameObject)Instantiate(SkPrefab);
-            a_SkObj.transform.SetParent(this.transform, false);
+            a_SkObj.transform.position = new Vector3(tr.position.x + key, tr.position.y, tr.position.z);
         }
     }
 
@@ -104,5 +105,6 @@ public class PlayerCtrl : MonoBehaviour
             GameMgr.Inst.AddGold();
             Destroy(coll.gameObject);
         }
+
     }
 }

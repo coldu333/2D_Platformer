@@ -9,13 +9,20 @@ public class SkCtrl : MonoBehaviour
     Vector3 m_DirTgVec; //방향벡터
     Vector3 a_StartPos = Vector3.zero; //시작 백터
 
-    PlayerCtrl playerCtrl = null;
+    Transform playerTr;
+    Transform skTr;
 
     // Start is called before the first frame update
     void Start()
     {
         SkSpeed = 5;
-        m_DirTgVec = new Vector3(1, 0, 0); //임시코드 캐릭터가 바라보는 방향으로 스킬발사하게 변경할 것
+        playerTr = GameObject.Find("Player").GetComponent<Transform>();
+        skTr = this.GetComponent<Transform>();
+
+        float a_Key;
+        a_Key = playerTr.localScale.x;
+        m_DirTgVec = new Vector3(a_Key, 0, 0);
+        skTr.localScale = new Vector3(a_Key*skTr.localScale.x, skTr.localScale.y, skTr.localScale.z);
     }
 
     // Update is called once per frame
@@ -24,8 +31,17 @@ public class SkCtrl : MonoBehaviour
         transform.position += m_DirTgVec * Time.deltaTime * SkSpeed;
         SkLife += Time.deltaTime;
 
-        if (this.transform.position.x > 9.0f)
+        if (skTr.position.x > 9.0f || skTr.position.x < -9.0f)
             Destroy(this.gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if(coll.gameObject.name.Contains("Monster"))
+        {
+            Destroy(this.gameObject, 0.3f);
+            Destroy(coll.gameObject, 0.3f);
+        }
     }
 }
 
