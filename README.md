@@ -9,6 +9,7 @@
 - platform 프리팹 및 스크립트 생성
 - Coin 프리팹 및 충돌 처리
 - UI 배치
+- skill 
 
 To do
 1) UI와 스크립트 연결
