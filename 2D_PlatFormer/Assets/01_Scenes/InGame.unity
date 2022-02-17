@@ -767,7 +767,7 @@ GameObject:
   - component: {fileID: 712773112}
   - component: {fileID: 712773116}
   - component: {fileID: 712773117}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Monster
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -2216,7 +2216,7 @@ PrefabInstance:
     - target: {fileID: 588875669011038975, guid: 29c54f2f7fc5eb24d9463c0bf8599c7d,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29c54f2f7fc5eb24d9463c0bf8599c7d, type: 3}
