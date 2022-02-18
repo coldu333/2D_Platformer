@@ -4,28 +4,21 @@ using UnityEngine;
 
 //animation.crossfade 사용해서 매끄럽게 처리하기
 
-//몬스터 구현 중
-//몬스터랑 플레이어가 충돌할 때 튕겨나가게 만들어야 겠다.(완료)
-//몬스터랑 아이템 충돌되지 않게 설정(완료)
-//움직일 때 애니메이션 연결해주기(완료)
-//추적(완료)
+//몬스터가 추적 상태일 때 플레이어의 방향에 따라 진행방향을 바꾸는 버그를 없애야함(완료)
+//UI 스크립트 연결(완료)
+//버그: 플레이어의 바라보는 방향과 몬스터의 바라보느 방향에 따라 튕겨져 나가는 것이 되지 않음.(완료)
+//죽는 거 구현(완료)
+//플레이어의 HP 구현(완료)
 
-//Ground 좌표를 얻어와서 몬스터가 지형 밖으로 빠져나가지 못 하게 하자.(완료)
+//몬스터 죽고 나서 아이템드롭 구현 -> monState가 Die가 될 때 gameMgr쪽에서 프리팹을 생성하는 것이 어떨까?
 
-//몬스터가 추적 상태일 때 플레이어의 방향에 따라 진행방향을 바꾸는 버그를 없애야함
-//-> 추척 state가 되면 몬스터가 바라보는 방향으로 IDLE범위 만큼 raycast를 쏜다
-//-> player가 충돌되면 그대도 충돌이 안 되면 -a_Key
-//UI 스크립트 연결
-//죽는 거 구현
-//죽고 나서 보상(점수, 골드, 아이템드롭) 구현
 
-//플레이어의 HP 구현
 //플레이어의 애니메이션 자연스럽게 구현
-
+//몬스터 스폰
 
 //데미지(쉐이더도 바꿔줄 거임), 보상, UI, 사운드
 //게임 컨셉 부여하기
-//맵 디자인, 게임오버 화면
+//맵 디자인
 //공격(중간 보스부터 구현해줘야겠다.)
 
 public class PlayerCtrl : MonoBehaviour
@@ -48,6 +41,7 @@ public class PlayerCtrl : MonoBehaviour
     public GameObject SkPrefab;
 
     //캐릭터 데미지 변수
+    MonCtrl refMon = null;
     bool isMonColl = false;
     float collTimer = 0.0f;
 
@@ -112,13 +106,14 @@ public class PlayerCtrl : MonoBehaviour
             a_SkObj.transform.position = new Vector3(tr.position.x + key, tr.position.y, tr.position.z);
         }
 
+        //캐릭터 충돌데미지
         if(isMonColl == true)
         {
             collTimer += Time.deltaTime;
             h = 0;
             v = 0;
 
-            moveDir = new Vector3(-key, 0, 0);
+            moveDir = new Vector3(refMon.a_key, 0, 0);
             if (1.0f < moveDir.magnitude)
                 moveDir.Normalize();
             transform.position += moveDir * (moveSpeed + 6.5f) * Time.deltaTime;
@@ -140,9 +135,10 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if(coll.gameObject.name.Contains("Monster")== true)
         {
-            //HP를 감소시켜야 함
+            refMon = coll.gameObject.GetComponent<MonCtrl>();
+            GameMgr.Inst.DeHp();
             isMonColl = true;
         }
-
     }
+
 }

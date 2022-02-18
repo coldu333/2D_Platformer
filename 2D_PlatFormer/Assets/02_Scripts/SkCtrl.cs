@@ -12,6 +12,8 @@ public class SkCtrl : MonoBehaviour
     Transform playerTr;
     Transform skTr;
 
+    MonCtrl refMon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,8 +41,11 @@ public class SkCtrl : MonoBehaviour
     {
         if(coll.gameObject.name.Contains("Monster"))
         {
+            //refMon = coll.gameObject.GetComponent<MonCtrl>();
+            //refMon.monState = MonState.Die;
             Destroy(this.gameObject, 0.3f);
             Destroy(coll.gameObject, 0.3f);
+            GameMgr.Inst.AddScore();
         }
     }
 }

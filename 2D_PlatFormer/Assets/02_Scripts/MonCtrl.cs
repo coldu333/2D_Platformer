@@ -12,14 +12,14 @@ public enum MonState
 }
 public class MonCtrl : MonoBehaviour
 {
-    MonState monState = MonState.Idle;
+    public MonState monState = MonState.Idle;
 
     //몬스터 이동
     Transform monTr;
     Transform playerTr;
 
     float moveSpeed = 0.0f;
-    int a_key = 1;
+    public int a_key = 1;
 
     Vector3 Dist;
 
@@ -33,15 +33,17 @@ public class MonCtrl : MonoBehaviour
 
     //몬스터 애니메이션
     Animator animator;
+    Vector3 CheckVec;
 
-    PlayerCtrl refPlayer;
+    //아이템 드롭
+    public GameObject CoinPrefab = null;
 
+    
     // Start is called before the first frame update
     void Start()
     {
         monTr = this.GetComponent<Transform>();
         playerTr = GameObject.Find("Player").GetComponent<Transform>();
-        refPlayer = GameObject.Find("Player").GetComponent<PlayerCtrl>();
         this.animator = GetComponent<Animator>();
 
         moveSpeed = 1.2f;
@@ -82,19 +84,23 @@ public class MonCtrl : MonoBehaviour
         if (monState == MonState.Idle) // 좌우로 왔다갔다 하다가 멈추고 반복
         {
             monTr.Translate(new Vector3(a_key, 0, 0) * moveSpeed * Time.deltaTime);
-            
-            if (monTr.position.x >= 3)
-                a_key = -1;
-            else if (monTr.position.x <= -3)
-                a_key = 1;
 
-            if (monTr.position.y == playerTr.position.y && Dist.magnitude < 3.0f)
+            if ((int)monTr.position.y == (int)playerTr.position.y && Dist.magnitude < 3.0f)
+            {
+                CheckVec = new Vector3(monTr.position.x + a_key, monTr.position.y, 0);
+                isPlayerRay = Physics2D.Raycast(CheckVec, new Vector3(monTr.position.x + a_key * 3, monTr.position.y, 0), 3);
+
+                if (isPlayerRay.collider == null)
+                    a_key = -a_key;
+                else if (isPlayerRay.collider != null)
+                    Debug.Log("플레이어 있음");
+
                 monState = MonState.Trace;
-
+            }
+               
         }
         else if(monState == MonState.Trace) // 플레이어가 추적거리 안으로 들어오면 추격
         {
-            a_key = -refPlayer.key;
             if (isColl == true)
             {
                 monTr.position = new Vector3(monTr.position.x, monTr.position.y, 0);//플레이어와 충돌하면 잠시 멈춤
@@ -111,7 +117,9 @@ public class MonCtrl : MonoBehaviour
         //}
         else if(monState == MonState.Die) // 몬스터 사망
         {
-            this.animator.SetBool("isMonRun", false);
+            //this.animator.SetBool("isMonRun", false);
+            //GameObject go = (GameObject)Instantiate(CoinPrefab);
+            //go.transform.position = monTr.position;
         }
     }
 
@@ -120,4 +128,5 @@ public class MonCtrl : MonoBehaviour
         if (coll.gameObject.name.Contains("Player"))
             isColl = true;
     }
+
 }
