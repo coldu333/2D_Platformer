@@ -41,10 +41,10 @@ public class SkCtrl : MonoBehaviour
     {
         if(coll.gameObject.name.Contains("Monster"))
         {
-            //refMon = coll.gameObject.GetComponent<MonCtrl>();
-            //refMon.monState = MonState.Die;
-            Destroy(this.gameObject, 0.3f);
-            Destroy(coll.gameObject, 0.3f);
+            refMon = coll.gameObject.GetComponent<MonCtrl>();
+            GameMgr.Inst.SpawnCoin(refMon.transform.position);
+            Destroy(this.gameObject);
+            Destroy(coll.gameObject);
             GameMgr.Inst.AddScore();
         }
     }

@@ -34,10 +34,6 @@ public class MonCtrl : MonoBehaviour
     //몬스터 애니메이션
     Animator animator;
     Vector3 CheckVec;
-
-    //아이템 드롭
-    public GameObject CoinPrefab = null;
-
     
     // Start is called before the first frame update
     void Start()
@@ -78,8 +74,11 @@ public class MonCtrl : MonoBehaviour
         if (raycasthit.collider == null)
         {
             a_key = -a_key;
-            monState = MonState.Idle;
+            //monState = MonState.Idle;
         }
+
+        //플레이어 방향 체크
+        CheckVec = new Vector3(monTr.position.x + a_key, monTr.position.y, 0);
 
         if (monState == MonState.Idle) // 좌우로 왔다갔다 하다가 멈추고 반복
         {
@@ -87,7 +86,7 @@ public class MonCtrl : MonoBehaviour
 
             if ((int)monTr.position.y == (int)playerTr.position.y && Dist.magnitude < 3.0f)
             {
-                CheckVec = new Vector3(monTr.position.x + a_key, monTr.position.y, 0);
+                
                 isPlayerRay = Physics2D.Raycast(CheckVec, new Vector3(monTr.position.x + a_key * 3, monTr.position.y, 0), 3);
 
                 if (isPlayerRay.collider == null)
@@ -115,12 +114,10 @@ public class MonCtrl : MonoBehaviour
         //{
 
         //}
-        else if(monState == MonState.Die) // 몬스터 사망
-        {
-            //this.animator.SetBool("isMonRun", false);
-            //GameObject go = (GameObject)Instantiate(CoinPrefab);
-            //go.transform.position = monTr.position;
-        }
+        //else if(monState == MonState.Die) // 몬스터 사망
+        //{
+            
+        //}
     }
 
     private void OnCollisionEnter2D(Collision2D coll)

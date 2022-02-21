@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//animation.crossfade 사용해서 매끄럽게 처리하기
 
-//몬스터가 추적 상태일 때 플레이어의 방향에 따라 진행방향을 바꾸는 버그를 없애야함(완료)
-//UI 스크립트 연결(완료)
-//버그: 플레이어의 바라보는 방향과 몬스터의 바라보느 방향에 따라 튕겨져 나가는 것이 되지 않음.(완료)
-//죽는 거 구현(완료)
-//플레이어의 HP 구현(완료)
+//몬스터 죽고 나서 아이템드롭 구현 -> monState가 Die가 될 때 gameMgr쪽에서 프리팹을 생성하는 것이 어떨까?(완)
+//점프를 전부 리지드바디로 바꾸는 건 어떨까?(완)
 
-//몬스터 죽고 나서 아이템드롭 구현 -> monState가 Die가 될 때 gameMgr쪽에서 프리팹을 생성하는 것이 어떨까?
-
-
+//버그 : 몬스터가 반대 쪽으로 달아나는 현상
 //플레이어의 애니메이션 자연스럽게 구현
+//버그 : 점프를 할 때 Run animation이 플레이됨.
 //몬스터 스폰
 
-//데미지(쉐이더도 바꿔줄 거임), 보상, UI, 사운드
+//데미지 시 투명화도(완)
+//데미지(쉐이더도 바꿔줄 거임) => 1초로 늘리자.
+//사운드
 //게임 컨셉 부여하기
 //맵 디자인
 //공격(중간 보스부터 구현해줘야겠다.)
@@ -35,6 +32,7 @@ public class PlayerCtrl : MonoBehaviour
     Rigidbody2D rigid2D;
     float JumpForce = 0.0f;
     
+    
     Animator animator;
     
     //캐릭터 스킬 변수
@@ -52,7 +50,8 @@ public class PlayerCtrl : MonoBehaviour
         QualitySettings.vSyncCount = 0;
 
         moveSpeed = 3.5f;
-        JumpForce = 75;
+        //JumpForce = 75;
+        JumpForce = 290;
         tr = GetComponent<Transform>();
         this.animator = GetComponent<Animator>();
         
@@ -81,7 +80,9 @@ public class PlayerCtrl : MonoBehaviour
                 moveDir.Normalize();
             transform.position += moveDir * moveSpeed * Time.deltaTime;
 
+            
             this.animator.SetBool("IsRun", true);
+
         }
         else
             this.animator.SetBool("IsRun", false);
@@ -91,11 +92,12 @@ public class PlayerCtrl : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && this.rigid2D.velocity.y == 0)
         {
             this.animator.SetTrigger("JumpTrigger");
-
-            moveDir = new Vector3(key, 1, 0);
-            if (1.0f < moveDir.magnitude)
-                moveDir.Normalize();
-            transform.position += moveDir * JumpForce * Time.deltaTime;
+            
+            //moveDir = new Vector3(key, 1, 0);
+            //if (1.0f < moveDir.magnitude)
+            //    moveDir.Normalize();
+            //transform.position += moveDir * JumpForce * Time.deltaTime;
+            this.rigid2D.AddForce(transform.up * JumpForce);
         }
         //캐릭터 점프
 
@@ -118,8 +120,17 @@ public class PlayerCtrl : MonoBehaviour
                 moveDir.Normalize();
             transform.position += moveDir * (moveSpeed + 6.5f) * Time.deltaTime;
 
+            //충돌 연출
+            this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 255);
+
+            if ((int)(collTimer*10)%3 == 0)
+                this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 120);
+            else if((int)(collTimer * 10) % 3 == 1)
+                this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 200);
+
             if (collTimer >= 0.3f)
             {
+                this.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
                 isMonColl = false;
                 collTimer = 0;
             }
@@ -128,12 +139,12 @@ public class PlayerCtrl : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if(coll.gameObject.name.Contains("Coin") == true)
+        if (coll.gameObject.name.Contains("Coin") == true)
         {
             GameMgr.Inst.AddGold();
             Destroy(coll.gameObject);
         }
-        else if(coll.gameObject.name.Contains("Monster")== true)
+        else if (coll.gameObject.name.Contains("Monster") == true)
         {
             refMon = coll.gameObject.GetComponent<MonCtrl>();
             GameMgr.Inst.DeHp();

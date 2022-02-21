@@ -47,6 +47,9 @@ public class GameMgr : MonoBehaviour
     //타이머
     float PlayTimer = 0.0f;
 
+    //드롭 아이템
+    public GameObject CoinPrefab = null;
+
     public static GameMgr Inst;
 
     void Awake()
@@ -124,5 +127,11 @@ public class GameMgr : MonoBehaviour
 
         if (HpBarImg.fillAmount <= 0)
             gameState = GameState.GameEnd;
+    }
+
+    public void SpawnCoin(Vector3 montr)
+    {
+        GameObject go = (GameObject)Instantiate(CoinPrefab);
+        go.transform.position = montr;
     }
 }
