@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-//몬스터 죽고 나서 아이템드롭 구현 -> monState가 Die가 될 때 gameMgr쪽에서 프리팹을 생성하는 것이 어떨까?(완)
-//점프를 전부 리지드바디로 바꾸는 건 어떨까?(완)
+//플레이어의 애니메이션 자연스럽게 구현(완)
+//버그 : 점프를 할 때 Run animation이 플레이됨.(완)
+//데미지 시 투명화도(완)
+//데미지(쉐이더도 바꿔줄 거임) => 1초로 늘리자.(완)
 
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상
-//플레이어의 애니메이션 자연스럽게 구현
-//버그 : 점프를 할 때 Run animation이 플레이됨.
+
 //몬스터 스폰
 
-//데미지 시 투명화도(완)
-//데미지(쉐이더도 바꿔줄 거임) => 1초로 늘리자.
+
 //사운드
 //게임 컨셉 부여하기
 //맵 디자인
@@ -21,6 +20,8 @@ using UnityEngine;
 public class PlayerCtrl : MonoBehaviour
 {
     //캐릭터 이동 변수
+    Rigidbody2D rigid2D;
+
     public int key = 0; //캐릭터가 바라보는 방향
 
     Transform tr;
@@ -29,11 +30,12 @@ public class PlayerCtrl : MonoBehaviour
     Vector3 moveDir = Vector3.zero;
     float moveSpeed = 0.0f;
 
-    Rigidbody2D rigid2D;
+    //캐릭터 점프
     float JumpForce = 0.0f;
-    
-    
+
+    //캐릭터 애니메이션
     Animator animator;
+    RaycastHit2D CheckJumpRay;
     
     //캐릭터 스킬 변수
     public GameObject SkPrefab;
@@ -43,19 +45,27 @@ public class PlayerCtrl : MonoBehaviour
     bool isMonColl = false;
     float collTimer = 0.0f;
 
+    bool isDamage = false;
+    float dmgTimer = 0.0f;
+
+    int playerLayer, monLayer;
+
     // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 60;   
         QualitySettings.vSyncCount = 0;
 
+        this.rigid2D = GetComponent<Rigidbody2D>();
+        tr = GetComponent<Transform>();
+        this.animator = GetComponent<Animator>();
+
         moveSpeed = 3.5f;
         //JumpForce = 75;
         JumpForce = 290;
-        tr = GetComponent<Transform>();
-        this.animator = GetComponent<Animator>();
-        
-        this.rigid2D = GetComponent<Rigidbody2D>();
+
+        playerLayer = LayerMask.NameToLayer("PLAYER");
+        monLayer = LayerMask.NameToLayer("MONSTER");
     }
 
     // Update is called once per frame
@@ -73,26 +83,35 @@ public class PlayerCtrl : MonoBehaviour
             transform.localScale = new Vector3(key, 1, 1);//좌우반전
         }
 
+        CheckJumpRay = Physics2D.Raycast(new Vector3(tr.position.x, tr.position.y - 1, 0), Vector3.down, 1);
+        if (CheckJumpRay.collider == null)
+            Debug.Log("공중");
+
         if (h != 0)
         {
             moveDir = new Vector3(h, 0, 0);
             if (1.0f < moveDir.magnitude)
                 moveDir.Normalize();
             transform.position += moveDir * moveSpeed * Time.deltaTime;
+        }
+        //캐릭터 이동
 
-            
+        //캐릭터 애니메이션
+        if (CheckJumpRay.collider != null && h!=0)
+        {
             this.animator.SetBool("IsRun", true);
-
+            this.animator.SetBool("IsIdle", false);
         }
         else
+        {
             this.animator.SetBool("IsRun", false);
-        //캐릭터 이동
+            this.animator.SetBool("IsIdle", true);
+        }
 
         //캐릭터 점프
         if(Input.GetKeyDown(KeyCode.Space) && this.rigid2D.velocity.y == 0)
         {
             this.animator.SetTrigger("JumpTrigger");
-            
             //moveDir = new Vector3(key, 1, 0);
             //if (1.0f < moveDir.magnitude)
             //    moveDir.Normalize();
@@ -120,20 +139,39 @@ public class PlayerCtrl : MonoBehaviour
                 moveDir.Normalize();
             transform.position += moveDir * (moveSpeed + 6.5f) * Time.deltaTime;
 
-            //충돌 연출
-            this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 255);
+            isDamage = true;
 
-            if ((int)(collTimer*10)%3 == 0)
-                this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 120);
-            else if((int)(collTimer * 10) % 3 == 1)
-                this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 200);
-
+            //충돌 타이머
             if (collTimer >= 0.3f)
             {
-                this.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
                 isMonColl = false;
                 collTimer = 0;
             }
+        }
+
+        //충돌 연출
+        if(isDamage == true)
+        {
+            dmgTimer += Time.deltaTime;
+
+            Physics2D.IgnoreLayerCollision(playerLayer, monLayer, true);
+
+            //충돌 연출
+            this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 255);
+
+            if ((int)(dmgTimer * 10) % 2 == 0)
+                this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 120);
+            else if ((int)(dmgTimer * 10) % 2 == 1)
+                this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 200);
+
+            if(dmgTimer > 1)
+            {
+                Physics2D.IgnoreLayerCollision(playerLayer, monLayer, false);
+                this.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
+                isDamage = false;
+                dmgTimer = 0;
+            }
+
         }
     }
 
@@ -146,10 +184,19 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if (coll.gameObject.name.Contains("Monster") == true)
         {
+            if (isDamage == true)
+                return;
+
             refMon = coll.gameObject.GetComponent<MonCtrl>();
             GameMgr.Inst.DeHp();
             isMonColl = true;
         }
+
+        //if (coll.gameObject.name.Contains("Ground"))
+        //{
+        //    Debug.Log("착지!");
+        //}
+            
     }
 
 }
