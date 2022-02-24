@@ -44,6 +44,9 @@ public class GameMgr : MonoBehaviour
     [HideInInspector] public int Score = 0;
     [HideInInspector] public float Hp = 0;
 
+    //게임 BGM
+    AudioSource audioSource = null;
+
     //타이머
     float PlayTimer = 0.0f;
 
@@ -63,6 +66,9 @@ public class GameMgr : MonoBehaviour
         gameState = GameState.GameIng;
         GameOverPanel.SetActive(false);
         GamePausePanel.SetActive(false);
+
+        this.audioSource = GetComponent<AudioSource>();
+        audioSource.Play();
 
         if (RetryBtn != null)
             RetryBtn.onClick.AddListener(() =>
@@ -90,6 +96,7 @@ public class GameMgr : MonoBehaviour
     {
         if (gameState == GameState.GameEnd)
         {
+            audioSource.Pause();
             Time.timeScale = 0.0f;
             GameOverPanel.SetActive(true);
             InfoText.text = "SOCORE : " + Score.ToString() + "\n\n" +
@@ -97,7 +104,7 @@ public class GameMgr : MonoBehaviour
                 "PLAY TIME : " + ((int)PlayTimer).ToString() + "s";
         }
         else if (gameState == GameState.GameIng)
-        {
+        { 
             Time.timeScale = 1;
             PlayTimer += Time.deltaTime;
         }

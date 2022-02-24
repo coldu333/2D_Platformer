@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//플레이어의 애니메이션 자연스럽게 구현(완)
-//버그 : 점프를 할 때 Run animation이 플레이됨.(완)
-//데미지 시 투명화도(완)
-//데미지(쉐이더도 바꿔줄 거임) => 1초로 늘리자.(완)
+//충돌할 때 스킬 발사가 안 되도록(완)
 
-//버그 : 몬스터가 반대 쪽으로 달아나는 현상
+//버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
 
 //몬스터 스폰
 
 
-//사운드
+//사운드(완)
+//화면 밖으로 나가지 못하게 막기(완)
+//함수로 나누기
+
 //게임 컨셉 부여하기
 //맵 디자인
 //공격(중간 보스부터 구현해줘야겠다.)
@@ -50,6 +50,13 @@ public class PlayerCtrl : MonoBehaviour
 
     int playerLayer, monLayer;
 
+    //캐릭터 음향
+    public AudioClip JumpSfx = null;
+    public AudioClip GetSfx = null;
+    public AudioClip FireSfx = null;
+    public AudioClip CollSfx = null;
+    AudioSource sfx = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +66,7 @@ public class PlayerCtrl : MonoBehaviour
         this.rigid2D = GetComponent<Rigidbody2D>();
         tr = GetComponent<Transform>();
         this.animator = GetComponent<Animator>();
+        this.sfx = GetComponent<AudioSource>();
 
         moveSpeed = 3.5f;
         //JumpForce = 75;
@@ -70,6 +78,42 @@ public class PlayerCtrl : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        PlayerMove();
+
+        //캐릭터 스킬
+        if(Input.GetKeyDown(KeyCode.F) && isMonColl == false)
+        {
+            sfx.PlayOneShot(FireSfx, 0.2f);
+            GameObject a_SkObj = (GameObject)Instantiate(SkPrefab);
+            a_SkObj.transform.position = new Vector3(tr.position.x + key, tr.position.y, tr.position.z);
+        }
+
+        MonColl();
+    }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.name.Contains("Coin") == true)
+        {
+            sfx.PlayOneShot(GetSfx, 0.2f);
+            GameMgr.Inst.AddGold();
+            Destroy(coll.gameObject);
+        }
+        else if (coll.gameObject.name.Contains("Monster") == true)
+        {
+            if (isDamage == true)
+                return;
+
+            sfx.PlayOneShot(CollSfx, 0.1f);
+
+            refMon = coll.gameObject.GetComponent<MonCtrl>();
+            GameMgr.Inst.DeHp();
+            isMonColl = true;
+        }
+    }
+
+    void PlayerMove()
     {
         //캐릭터 이동
         h = Input.GetAxis("Horizontal");
@@ -94,10 +138,18 @@ public class PlayerCtrl : MonoBehaviour
                 moveDir.Normalize();
             transform.position += moveDir * moveSpeed * Time.deltaTime;
         }
+
+        //화면 밖으로 이동 제한
+        if (tr.position.x <= -8.5f)
+            tr.position = new Vector3(-8.5f, tr.position.y, 0);
+        else if (tr.position.x >= 8.5f)
+            tr.position = new Vector3(8.5f, tr.position.y, 0);
+
+
         //캐릭터 이동
 
         //캐릭터 애니메이션
-        if (CheckJumpRay.collider != null && h!=0)
+        if (CheckJumpRay.collider != null && h != 0)
         {
             this.animator.SetBool("IsRun", true);
             this.animator.SetBool("IsIdle", false);
@@ -109,8 +161,9 @@ public class PlayerCtrl : MonoBehaviour
         }
 
         //캐릭터 점프
-        if(Input.GetKeyDown(KeyCode.Space) && this.rigid2D.velocity.y == 0)
+        if (Input.GetKeyDown(KeyCode.Space) && this.rigid2D.velocity.y == 0)
         {
+            sfx.PlayOneShot(JumpSfx, 0.2f); //효과음
             this.animator.SetTrigger("JumpTrigger");
             //moveDir = new Vector3(key, 1, 0);
             //if (1.0f < moveDir.magnitude)
@@ -119,16 +172,11 @@ public class PlayerCtrl : MonoBehaviour
             this.rigid2D.AddForce(transform.up * JumpForce);
         }
         //캐릭터 점프
+    }
 
-        //캐릭터 스킬
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            GameObject a_SkObj = (GameObject)Instantiate(SkPrefab);
-            a_SkObj.transform.position = new Vector3(tr.position.x + key, tr.position.y, tr.position.z);
-        }
-
-        //캐릭터 충돌데미지
-        if(isMonColl == true)
+    void MonColl()
+    {
+        if (isMonColl == true)
         {
             collTimer += Time.deltaTime;
             h = 0;
@@ -150,7 +198,7 @@ public class PlayerCtrl : MonoBehaviour
         }
 
         //충돌 연출
-        if(isDamage == true)
+        if (isDamage == true)
         {
             dmgTimer += Time.deltaTime;
 
@@ -164,7 +212,7 @@ public class PlayerCtrl : MonoBehaviour
             else if ((int)(dmgTimer * 10) % 2 == 1)
                 this.GetComponent<SpriteRenderer>().color = new Color32(255, 120, 120, 200);
 
-            if(dmgTimer > 1)
+            if (dmgTimer > 1)
             {
                 Physics2D.IgnoreLayerCollision(playerLayer, monLayer, false);
                 this.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
@@ -174,29 +222,4 @@ public class PlayerCtrl : MonoBehaviour
 
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (coll.gameObject.name.Contains("Coin") == true)
-        {
-            GameMgr.Inst.AddGold();
-            Destroy(coll.gameObject);
-        }
-        else if (coll.gameObject.name.Contains("Monster") == true)
-        {
-            if (isDamage == true)
-                return;
-
-            refMon = coll.gameObject.GetComponent<MonCtrl>();
-            GameMgr.Inst.DeHp();
-            isMonColl = true;
-        }
-
-        //if (coll.gameObject.name.Contains("Ground"))
-        //{
-        //    Debug.Log("착지!");
-        //}
-            
-    }
-
 }
