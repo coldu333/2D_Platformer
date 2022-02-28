@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//충돌할 때 스킬 발사가 안 되도록(완)
-
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
 
-//몬스터 스폰
-
-
-//사운드(완)
-//화면 밖으로 나가지 못하게 막기(완)
-//함수로 나누기
+//몬스터 스폰 - 초기 몬스터를 3마리, 스폰주기를 0.5초로 늘려야함
+//초기 몬스터가 계속 5마리로 고정되는 버그를 고쳐야 함.
 
 //게임 컨셉 부여하기
 //맵 디자인
@@ -90,27 +84,6 @@ public class PlayerCtrl : MonoBehaviour
         }
 
         MonColl();
-    }
-
-    private void OnCollisionEnter2D(Collision2D coll)
-    {
-        if (coll.gameObject.name.Contains("Coin") == true)
-        {
-            sfx.PlayOneShot(GetSfx, 0.2f);
-            GameMgr.Inst.AddGold();
-            Destroy(coll.gameObject);
-        }
-        else if (coll.gameObject.name.Contains("Monster") == true)
-        {
-            if (isDamage == true)
-                return;
-
-            sfx.PlayOneShot(CollSfx, 0.1f);
-
-            refMon = coll.gameObject.GetComponent<MonCtrl>();
-            GameMgr.Inst.DeHp();
-            isMonColl = true;
-        }
     }
 
     void PlayerMove()
@@ -222,4 +195,26 @@ public class PlayerCtrl : MonoBehaviour
 
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.name.Contains("Coin") == true)
+        {
+            sfx.PlayOneShot(GetSfx, 0.2f);
+            GameMgr.Inst.AddGold();
+            Destroy(coll.gameObject);
+        }
+        else if (coll.gameObject.name.Contains("Monster") == true)
+        {
+            if (isDamage == true)
+                return;
+
+            sfx.PlayOneShot(CollSfx, 0.1f);
+
+            refMon = coll.gameObject.GetComponent<MonCtrl>();
+            GameMgr.Inst.DeHp();
+            isMonColl = true;
+        }
+    }
+
 }

@@ -44,7 +44,6 @@ public class SkCtrl : MonoBehaviour
             refMon = coll.gameObject.GetComponent<MonCtrl>();
             GameMgr.Inst.SpawnCoin(refMon.transform.position);
             Destroy(this.gameObject);
-            Destroy(coll.gameObject);
             GameMgr.Inst.AddScore();
         }
     }

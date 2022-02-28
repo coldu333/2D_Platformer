@@ -86,7 +86,7 @@ public class MonCtrl : MonoBehaviour
 
             if ((int)monTr.position.y == (int)playerTr.position.y && Dist.magnitude < 3.0f)
             {
-                
+
                 isPlayerRay = Physics2D.Raycast(CheckVec, new Vector3(monTr.position.x + a_key * 3, monTr.position.y, 0), 3);
 
                 if (isPlayerRay.collider == null)
@@ -96,9 +96,9 @@ public class MonCtrl : MonoBehaviour
 
                 monState = MonState.Trace;
             }
-               
+
         }
-        else if(monState == MonState.Trace) // 플레이어가 추적거리 안으로 들어오면 추격
+        else if (monState == MonState.Trace) // 플레이어가 추적거리 안으로 들어오면 추격
         {
             if (isColl == true)
             {
@@ -107,23 +107,49 @@ public class MonCtrl : MonoBehaviour
             else
                 monTr.Translate(new Vector3(a_key, 0, 0) * (moveSpeed + 1.8f) * Time.deltaTime);// 플레이어를 발견하면 돌진
 
-            if(Dist.magnitude >= 4.0f)
+            if (Dist.magnitude >= 4.0f)
                 monState = MonState.Idle;
         }
         //else if(monState == MonState.Attack) // 플레이어를 공격
         //{
 
         //}
-        //else if(monState == MonState.Die) // 몬스터 사망
-        //{
+        else if (monState == MonState.Die) // 몬스터 사망
+        {
+            StopAllCoroutines();
+
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            //gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 0);
             
-        //}
+            StartCoroutine(this.PushObjectPool());
+        }
+    }
+
+    IEnumerator PushObjectPool()
+    {
+        Debug.Log("Die");
+
+        monState = MonState.Idle;
+        //gameObject.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255);
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
+
+        gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(3.0f);
     }
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.name.Contains("Player"))
             isColl = true;
+
+        if(coll.gameObject.name.Contains("Skill"))
+        {
+            monState = MonState.Die;
+        }
+            
     }
 
 }

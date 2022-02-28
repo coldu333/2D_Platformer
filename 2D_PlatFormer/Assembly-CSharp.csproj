@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\02_Scripts\GameMgr.cs" />
     <Compile Include="Assets\02_Scripts\MonCtrl.cs" />
+    <Compile Include="Assets\02_Scripts\MonGenerator.cs" />
     <Compile Include="Assets\02_Scripts\PlatformCtrl.cs" />
     <Compile Include="Assets\02_Scripts\PlayerCtrl.cs" />
     <Compile Include="Assets\02_Scripts\SkCtrl.cs" />

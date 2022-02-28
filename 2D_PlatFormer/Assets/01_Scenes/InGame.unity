@@ -2056,6 +2056,7 @@ GameObject:
   - component: {fileID: 1230171687}
   - component: {fileID: 1230171686}
   - component: {fileID: 1230171688}
+  - component: {fileID: 1230171689}
   m_Layer: 0
   m_Name: GameMgr
   m_TagString: Untagged
@@ -2088,7 +2089,6 @@ MonoBehaviour:
   Gold: 0
   Score: 0
   Hp: 0
-  GameOverSfx: {fileID: 8300000, guid: a0ca8964c08d54c5dbebf245bdc474ca, type: 3}
   CoinPrefab: {fileID: 588875669011038975, guid: 29c54f2f7fc5eb24d9463c0bf8599c7d,
     type: 3}
 --- !u!4 &1230171687
@@ -2201,6 +2201,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1230171689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230171685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10e424aa1a15e5f438f6db0f3b3f5eef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: []
+  monsterPrefab: {fileID: 2799144918268634752, guid: 98be3465c19603142a3e7d612bdb0152,
+    type: 3}
+  monsterPool: []
+  createTime: 2
+  maxMonster: 5
 --- !u!1 &1297363711
 GameObject:
   m_ObjectHideFlags: 0
@@ -2290,7 +2308,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1390055894
 Transform:
   m_ObjectHideFlags: 0
@@ -3615,6 +3633,16 @@ PrefabInstance:
     - target: {fileID: 2799144918268634764, guid: 98be3465c19603142a3e7d612bdb0152,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2799144918268634765, guid: 98be3465c19603142a3e7d612bdb0152,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2799144918268634766, guid: 98be3465c19603142a3e7d612bdb0152,
+        type: 3}
+      propertyPath: m_GravityScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
