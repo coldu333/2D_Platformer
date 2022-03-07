@@ -9,11 +9,13 @@ public class MonGenerator : MonoBehaviour
     public List<GameObject> monsterPool = new List<GameObject>();
 
     public float createTime = 5.0f;
-    public int maxMonster = 3; //초기 몬스터 수
+    public int maxMonster; //초기 몬스터 수
 
     // Start is called before the first frame update
     void Start()
     {
+        maxMonster = 3;
+        Debug.Log(maxMonster);
         for(int i = 0; i<maxMonster; i++) //몬스터 생성 후 오브젝트 풀에 등록
         {
             GameObject monster = (GameObject)Instantiate(monsterPrefab);
