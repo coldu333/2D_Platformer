@@ -629,6 +629,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.PixelPerfect.Editor">
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -647,20 +650,17 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Tilemap.Editor">
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.PixelPerfect">
+      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.PixelPerfect.Editor">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.PixelPerfect">
-      <HintPath>C:/Users/user/Documents/GitHub/2D_Platformer/2D_PlatFormer/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
