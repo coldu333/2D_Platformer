@@ -115,8 +115,8 @@ public class PlayerCtrl : MonoBehaviour
         //화면 밖으로 이동 제한
         if (tr.position.x <= -8.5f)
             tr.position = new Vector3(-8.5f, tr.position.y, 0);
-        else if (tr.position.x >= 8.5f)
-            tr.position = new Vector3(8.5f, tr.position.y, 0);
+        //else if (tr.position.x >= 8.5f)
+        //    tr.position = new Vector3(8.5f, tr.position.y, 0);
 
 
         //캐릭터 이동
