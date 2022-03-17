@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//플레이어 위치 제한 설정을 변경할 것(완)
-//카메라 위치 예외처리 할 것
+//카메라 위치 예외처리 할 것(현재는 x축만 제한함)
+
 
 public class FollowCam : MonoBehaviour
 {
     Transform playerTr = null;
     Transform CamTr = null;
+
+    Vector3 NewPos = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -18,8 +20,17 @@ public class FollowCam : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        CamTr.position = new Vector3(playerTr.position.x, CamTr.position.y, CamTr.position.z);
+        //NewPos = CamTr.position;
+        NewPos = new Vector3(playerTr.position.x, CamTr.position.y, -10);
+
+        if (NewPos.x < -0.45f)
+            NewPos.x = -0.45f;
+
+        if (NewPos.x > 18.45f)
+            NewPos.x = 18.45f;
+        
+        CamTr.position = NewPos;
     }
 }

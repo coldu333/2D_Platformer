@@ -4,9 +4,7 @@ using UnityEngine;
 
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
 
-//몬스터 스폰 - 초기 몬스터를 3마리, 스폰주기를 0.5초로 늘려야함
-//초기 몬스터가 계속 5마리로 고정되는 버그를 고쳐야 함.
-
+//2단 뛰기 , 슬라이드 구현하기
 //게임 컨셉 부여하기
 //맵 디자인
 //공격(중간 보스부터 구현해줘야겠다.)
@@ -16,7 +14,7 @@ public class PlayerCtrl : MonoBehaviour
     //캐릭터 이동 변수
     Rigidbody2D rigid2D;
 
-    public int key = 0; //캐릭터가 바라보는 방향
+    public float key = 0; //캐릭터가 바라보는 방향
 
     Transform tr;
     float h = 0.0f; //수평(x축)
@@ -26,6 +24,11 @@ public class PlayerCtrl : MonoBehaviour
 
     //캐릭터 점프
     float JumpForce = 0.0f;
+    int JumpCount = 0;
+
+    //슬라이드 변수
+    float height = 0;
+    bool isSlide = false;
 
     //캐릭터 애니메이션
     Animator animator;
@@ -62,6 +65,9 @@ public class PlayerCtrl : MonoBehaviour
         this.animator = GetComponent<Animator>();
         this.sfx = GetComponent<AudioSource>();
 
+        key = 1;
+        height = 1;
+
         moveSpeed = 3.5f;
         //JumpForce = 75;
         JumpForce = 290;
@@ -88,6 +94,8 @@ public class PlayerCtrl : MonoBehaviour
 
     void PlayerMove()
     {
+        transform.localScale = new Vector3(key, height, 1);//좌우반전
+
         //캐릭터 이동
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
@@ -95,14 +103,17 @@ public class PlayerCtrl : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) key = 1;
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) key = -1;
 
-        if (key != 0)
+        //캐릭터 슬라이드
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
-            transform.localScale = new Vector3(key, 1, 1);//좌우반전
+            isSlide = true;
+            height = 0.8f;
         }
-
-        CheckJumpRay = Physics2D.Raycast(new Vector3(tr.position.x, tr.position.y - 1, 0), Vector3.down, 1);
-        if (CheckJumpRay.collider == null)
-            Debug.Log("공중");
+        else
+        {
+            isSlide = false;
+            height = 1;
+        }
 
         if (h != 0)
         {
@@ -118,10 +129,10 @@ public class PlayerCtrl : MonoBehaviour
         //else if (tr.position.x >= 8.5f)
         //    tr.position = new Vector3(8.5f, tr.position.y, 0);
 
-
         //캐릭터 이동
 
         //캐릭터 애니메이션
+        CheckJumpRay = Physics2D.Raycast(new Vector3(tr.position.x, tr.position.y - 1, 0), Vector3.down, 1);
         if (CheckJumpRay.collider != null && h != 0)
         {
             this.animator.SetBool("IsRun", true);
@@ -132,19 +143,26 @@ public class PlayerCtrl : MonoBehaviour
             this.animator.SetBool("IsRun", false);
             this.animator.SetBool("IsIdle", true);
         }
+        //캐릭터 애니메이션
 
         //캐릭터 점프
-        if (Input.GetKeyDown(KeyCode.Space) && this.rigid2D.velocity.y == 0)
+        if (Input.GetKeyDown(KeyCode.Space) && isSlide == false)//this.rigid2D.velocity.y == 0)
         {
+            if (JumpCount > 1)
+                return;
+
+            if (JumpCount == 1)
+                JumpForce = 200; //더블점프
+            else
+                JumpForce = 290;
+
             sfx.PlayOneShot(JumpSfx, 0.2f); //효과음
             this.animator.SetTrigger("JumpTrigger");
-            //moveDir = new Vector3(key, 1, 0);
-            //if (1.0f < moveDir.magnitude)
-            //    moveDir.Normalize();
-            //transform.position += moveDir * JumpForce * Time.deltaTime;
             this.rigid2D.AddForce(transform.up * JumpForce);
+            JumpCount++;
         }
         //캐릭터 점프
+
     }
 
     void MonColl()
@@ -215,6 +233,10 @@ public class PlayerCtrl : MonoBehaviour
             GameMgr.Inst.DeHp();
             isMonColl = true;
         }
+        else if(coll.gameObject.name.Contains("Ground")==true)
+        {
+            JumpCount = 0;
+        }    
     }
 
 }
