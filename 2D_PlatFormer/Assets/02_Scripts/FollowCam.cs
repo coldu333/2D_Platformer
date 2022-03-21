@@ -28,8 +28,8 @@ public class FollowCam : MonoBehaviour
         if (NewPos.x < -0.45f)
             NewPos.x = -0.45f;
 
-        if (NewPos.x > 18.45f)
-            NewPos.x = 18.45f;
+        //if (NewPos.x > 18.45f)
+        //    NewPos.x = 18.45f;
         
         CamTr.position = NewPos;
     }
