@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
+//버그 : 점프를 눌렀으나 위에 장애물로 공중에 뜨지 못해도 점프 카운트가 올라가서 점프가 막히는 현상
+//버그 : 픽셀 사이에 틈에 끼게 됨
+//버그 : 충돌체를 밀면 캐릭터가 덜덜덜 흔들림
 
-//2단 뛰기 , 슬라이드 구현하기
+//가시덤블에 충돌하면 펄쩍 뛰는 연출해주자 
 //게임 컨셉 부여하기
-//맵 디자인
 //공격(중간 보스부터 구현해줘야겠다.)
+
+
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -88,8 +92,9 @@ public class PlayerCtrl : MonoBehaviour
             GameObject a_SkObj = (GameObject)Instantiate(SkPrefab);
             a_SkObj.transform.position = new Vector3(tr.position.x + key, tr.position.y, tr.position.z);
         }
-
+        
         MonColl();
+
     }
 
     void PlayerMove()
@@ -133,6 +138,7 @@ public class PlayerCtrl : MonoBehaviour
 
         //캐릭터 애니메이션
         CheckJumpRay = Physics2D.Raycast(new Vector3(tr.position.x, tr.position.y - 1, 0), Vector3.down, 1);
+        
         if (CheckJumpRay.collider != null && h != 0)
         {
             this.animator.SetBool("IsRun", true);
@@ -188,7 +194,11 @@ public class PlayerCtrl : MonoBehaviour
             }
         }
 
-        //충돌 연출
+        DamageColor();
+    }
+
+    void DamageColor()
+    {
         if (isDamage == true)
         {
             dmgTimer += Time.deltaTime;
@@ -236,7 +246,17 @@ public class PlayerCtrl : MonoBehaviour
         else if(coll.gameObject.name.Contains("Ground")==true)
         {
             JumpCount = 0;
-        }    
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag.Contains("Obstacle")== true)
+        {
+            GameMgr.Inst.DeHp();
+            isDamage = true;
+            DamageColor();
+        }
     }
 
 }

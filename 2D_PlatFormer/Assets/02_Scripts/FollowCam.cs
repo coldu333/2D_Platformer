@@ -23,14 +23,17 @@ public class FollowCam : MonoBehaviour
     void LateUpdate()
     {
         //NewPos = CamTr.position;
-        NewPos = new Vector3(playerTr.position.x, CamTr.position.y, -10);
+        NewPos = new Vector3(playerTr.position.x, playerTr.position.y + 1.5f, -10);
 
         if (NewPos.x < -0.45f)
             NewPos.x = -0.45f;
 
         //if (NewPos.x > 18.45f)
         //    NewPos.x = 18.45f;
-        
+
+        if (NewPos.y > 3.45f)
+            NewPos.y = 3.45f;
+
         CamTr.position = NewPos;
     }
 }
