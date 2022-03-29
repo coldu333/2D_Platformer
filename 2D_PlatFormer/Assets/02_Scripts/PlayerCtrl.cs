@@ -7,7 +7,7 @@ using UnityEngine;
 //버그 : 픽셀 사이에 틈에 끼게 됨
 //버그 : 충돌체를 밀면 캐릭터가 덜덜덜 흔들림
 
-//가시덤블에 충돌하면 펄쩍 뛰는 연출해주자 
+//가시덤블에 충돌하면 펄쩍 뛰는 연출해주자 //현재는 닿으면 바로 게임 오버 화면이 나오게 설정
 //게임 컨셉 부여하기
 //공격(중간 보스부터 구현해줘야겠다.)
 
@@ -95,6 +95,7 @@ public class PlayerCtrl : MonoBehaviour
         
         MonColl();
 
+        
     }
 
     void PlayerMove()
@@ -197,6 +198,7 @@ public class PlayerCtrl : MonoBehaviour
         DamageColor();
     }
 
+
     void DamageColor()
     {
         if (isDamage == true)
@@ -253,10 +255,9 @@ public class PlayerCtrl : MonoBehaviour
     {
         if(other.tag.Contains("Obstacle")== true)
         {
-            GameMgr.Inst.DeHp();
-            isDamage = true;
-            DamageColor();
+            GameMgr.Inst.GameOver();
         }
+        
     }
 
 }

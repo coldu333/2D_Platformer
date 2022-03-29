@@ -199,6 +199,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25556108}
   m_CullTransparentMesh: 0
+--- !u!1 &30484657 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1252599095145288240, guid: b5916bb3f6f3c364194655152f699bcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 292673691}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &30484666
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30484657}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.03, y: -0.5}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.67, y: 0.001}
+  m_EdgeRadius: 0
 --- !u!1 &199942604
 GameObject:
   m_ObjectHideFlags: 0
@@ -6001,7 +6033,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8415372021189188317, guid: b5916bb3f6f3c364194655152f699bcd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4337194472477455302, guid: b5916bb3f6f3c364194655152f699bcd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b5916bb3f6f3c364194655152f699bcd, type: 3}
 --- !u!1 &355475461
 GameObject:

@@ -133,7 +133,12 @@ public class GameMgr : MonoBehaviour
         HpBarImg.fillAmount -= a_Damage;
 
         if (HpBarImg.fillAmount <= 0)
-            gameState = GameState.GameEnd;
+            GameOver();
+    }
+
+    public void GameOver()
+    {
+        gameState = GameState.GameEnd;
     }
 
     public void SpawnCoin(Vector3 montr)
