@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
-//버그 : 점프를 눌렀으나 위에 장애물로 공중에 뜨지 못해도 점프 카운트가 올라가서 점프가 막히는 현상
-//버그 : 픽셀 사이에 틈에 끼게 됨
+//버그 : 점프를 눌렀으나 위에 장애물로 공중에 뜨지 못해도 점프 카운트가 올라가서 점프가 막히는 현상(완)
+//버그 : 특정 포인트에서 점프 카운트가 리셋이 안 됨 => 콜리더 충돌체크가 되지 않음.
+//버그 : 픽셀 사이에 틈에 끼게 됨 >> composite 콜리더를 사용하면 애니메이션이 작동되지 않음.
 //버그 : 충돌체를 밀면 캐릭터가 덜덜덜 흔들림
 
-//가시덤블에 충돌하면 펄쩍 뛰는 연출해주자 //현재는 닿으면 바로 게임 오버 화면이 나오게 설정
+//애니메이션 재정비...
 //게임 컨셉 부여하기
 //공격(중간 보스부터 구현해줘야겠다.)
 
@@ -95,7 +96,7 @@ public class PlayerCtrl : MonoBehaviour
         
         MonColl();
 
-        
+        Debug.Log(JumpCount);
     }
 
     void PlayerMove()
@@ -139,16 +140,16 @@ public class PlayerCtrl : MonoBehaviour
 
         //캐릭터 애니메이션
         CheckJumpRay = Physics2D.Raycast(new Vector3(tr.position.x, tr.position.y - 1, 0), Vector3.down, 1);
-        
+
         if (CheckJumpRay.collider != null && h != 0)
         {
             this.animator.SetBool("IsRun", true);
-            this.animator.SetBool("IsIdle", false);
+            //this.animator.SetBool("IsIdle", false);
         }
         else
         {
             this.animator.SetBool("IsRun", false);
-            this.animator.SetBool("IsIdle", true);
+            //this.animator.SetBool("IsIdle", true);
         }
         //캐릭터 애니메이션
 
@@ -228,6 +229,8 @@ public class PlayerCtrl : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
+        Debug.Log(coll.gameObject.name);
+        JumpCount = 0;
         if (coll.gameObject.name.Contains("Coin") == true)
         {
             sfx.PlayOneShot(GetSfx, 0.2f);
@@ -247,7 +250,7 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if(coll.gameObject.name.Contains("Ground")==true)
         {
-            JumpCount = 0;
+            //JumpCount = 0;
         }
     }
 
