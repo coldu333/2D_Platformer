@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
-//버그 : 점프를 눌렀으나 위에 장애물로 공중에 뜨지 못해도 점프 카운트가 올라가서 점프가 막히는 현상(완)
-//버그 : 특정 포인트에서 점프 카운트가 리셋이 안 됨 => 콜리더 충돌체크가 되지 않음.
-//버그 : 픽셀 사이에 틈에 끼게 됨 >> composite 콜리더를 사용하면 애니메이션이 작동되지 않음.
-//버그 : 충돌체를 밀면 캐릭터가 덜덜덜 흔들림
+//버그 : 픽셀 사이에 틈에 끼게 됨(완)
+//버그 : 모서리 부분에서 점프 카운트가 초기화되지 않는 현상
+//버그 : 충돌체를 밀면 캐릭터가 덜덜덜 흔들림(완)
+//버그 : 스킬이 지형에 막혀서 파괴되면 좋겠는데 충돌이 안 되고 있음
 
-//애니메이션 재정비...
+
+//버그 : Composite Collider를 사용하면 애니메이션이 바뀌지 않는 문제가 발생(완)
+
+//애니메이션 재정비...(완)
+//몬스터 스폰 적용
+//사운드이팩트 적용
+//UI 재정비
+//NPC 만들기
+
 //게임 컨셉 부여하기
 //공격(중간 보스부터 구현해줘야겠다.)
 
@@ -82,7 +90,7 @@ public class PlayerCtrl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         PlayerMove();
 
@@ -95,8 +103,6 @@ public class PlayerCtrl : MonoBehaviour
         }
         
         MonColl();
-
-        Debug.Log(JumpCount);
     }
 
     void PlayerMove()
@@ -143,15 +149,17 @@ public class PlayerCtrl : MonoBehaviour
 
         if (CheckJumpRay.collider != null && h != 0)
         {
-            this.animator.SetBool("IsRun", true);
-            //this.animator.SetBool("IsIdle", false);
+            this.animator.SetBool( "IsRun", true );
+        //    if(CheckJumpRay.collider.name.Contains( "Ground" ) && h != 0)
+        //        this.animator.SetBool("IsRun", true);
+        //    //this.animator.SetBool("IsIdle", false);
         }
         else
         {
             this.animator.SetBool("IsRun", false);
-            //this.animator.SetBool("IsIdle", true);
+            this.animator.SetBool("IsIdle", true);
         }
-        //캐릭터 애니메이션
+        ////캐릭터 애니메이션
 
         //캐릭터 점프
         if (Input.GetKeyDown(KeyCode.Space) && isSlide == false)//this.rigid2D.velocity.y == 0)

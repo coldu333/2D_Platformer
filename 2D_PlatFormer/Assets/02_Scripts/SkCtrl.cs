@@ -20,6 +20,7 @@ public class SkCtrl : MonoBehaviour
         SkSpeed = 5;
         playerTr = GameObject.Find("Player").GetComponent<Transform>();
         skTr = this.GetComponent<Transform>();
+        SkLife = 1f;
 
         float a_Key;
         a_Key = playerTr.localScale.x;
@@ -31,21 +32,23 @@ public class SkCtrl : MonoBehaviour
     void Update()
     {
         transform.position += m_DirTgVec * Time.deltaTime * SkSpeed;
-        SkLife += Time.deltaTime;
+        SkLife -= Time.deltaTime;
 
-        if (skTr.position.x > 9.0f || skTr.position.x < -9.0f)
+        if (SkLife < 0)
             Destroy(this.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if(coll.gameObject.name.Contains("Monster"))
+        if(coll.gameObject.name.Contains( "Monster" ))
         {
             refMon = coll.gameObject.GetComponent<MonCtrl>();
-            GameMgr.Inst.SpawnCoin(refMon.transform.position);
-            Destroy(this.gameObject);
+            GameMgr.Inst.SpawnCoin( refMon.transform.position );
+            Destroy( this.gameObject );
             GameMgr.Inst.AddScore();
         }
+        if (coll.gameObject.name.Contains("Ground"))
+            Destroy(this.gameObject);
     }
 }
 
