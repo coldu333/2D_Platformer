@@ -28,7 +28,8 @@ public class MonCtrl : MonoBehaviour
 
     //몬스터 지형 인식 변수
     Vector3 frontVec;
-    RaycastHit2D raycasthit;
+    RaycastHit2D null_CheckRay;
+    RaycastHit2D Ground_CheckRay;
     RaycastHit2D isPlayerRay;
 
     //몬스터 애니메이션
@@ -68,18 +69,26 @@ public class MonCtrl : MonoBehaviour
         monTr.localScale = new Vector3(-1 * a_key, 1, 1);
         Dist = playerTr.position - monTr.position;
 
-        //벼랑에서 방향을 바꿈
+        CheckVec = new Vector3(monTr.position.x + a_key, monTr.position.y, 0);
+
+        //벼랑 앞에서 방향을 바꿈
         frontVec = new Vector3(a_key*0.5f + monTr.position.x, monTr.position.y, 0);
-        raycasthit = Physics2D.Raycast(frontVec, Vector3.down, 1);
-        if (raycasthit.collider == null)
+        null_CheckRay = Physics2D.Raycast(frontVec, Vector3.down, 1);
+        Ground_CheckRay = Physics2D.Raycast(monTr.position, frontVec, 1);
+
+        if (null_CheckRay.collider == null)
         {
             a_key = -a_key;
             //monState = MonState.Idle;
         }
 
-        //플레이어 방향 체크
-        CheckVec = new Vector3(monTr.position.x + a_key, monTr.position.y, 0);
+        //벽 앞에서 뱡향 바꿈
+        Ground_CheckRay = Physics2D.Raycast(CheckVec, new Vector3(monTr.position.x + a_key, monTr.position.y), 1);
+        if (Ground_CheckRay.collider != null)
+            if (Ground_CheckRay.collider.name == "Ground")
+                a_key = -a_key;
 
+        //플레이어 방향 체크
         if (monState == MonState.Idle) // 좌우로 왔다갔다 하다가 멈추고 반복
         {
             monTr.Translate(new Vector3(a_key, 0, 0) * moveSpeed * Time.deltaTime);
@@ -92,7 +101,7 @@ public class MonCtrl : MonoBehaviour
                 if (isPlayerRay.collider == null)
                     a_key = -a_key;
                 else if (isPlayerRay.collider != null)
-                    Debug.Log("플레이어 있음");
+                    //Debug.Log("플레이어 있음");
 
                 monState = MonState.Trace;
             }

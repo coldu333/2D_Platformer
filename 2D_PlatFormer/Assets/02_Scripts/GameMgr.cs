@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//UI와 스크립트 연결
-//데미지
-//몬스터
-//타일맵
-//게임오버씬
-//게임 컨셉 디벨롭
 //로비 및 메뉴씬 구현
 
 public enum GameState
@@ -73,7 +67,7 @@ public class GameMgr : MonoBehaviour
         if (RetryBtn != null)
             RetryBtn.onClick.AddListener(() =>
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("InGame");
+                //UnityEngine.SceneManagement.SceneManager.LoadScene("InGame");
             });
 
         if (StopBtn != null)

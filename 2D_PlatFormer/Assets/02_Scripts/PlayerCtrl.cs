@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //버그 : 몬스터가 반대 쪽으로 달아나는 현상/ 추적상태와 벼랑체크 코드가 서로 간섭해서 일어나는 듯
-//버그 : 픽셀 사이에 틈에 끼게 됨(완)
 //버그 : 모서리 부분에서 점프 카운트가 초기화되지 않는 현상
-//버그 : 충돌체를 밀면 캐릭터가 덜덜덜 흔들림(완)
 //버그 : 스킬이 지형에 막혀서 파괴되면 좋겠는데 충돌이 안 되고 있음
 
+//몬스터 설치(완)
+//사운드이팩트 적용(완)
+//UI 재정비(완)
 
-//버그 : Composite Collider를 사용하면 애니메이션이 바뀌지 않는 문제가 발생(완)
-
-//애니메이션 재정비...(완)
-//몬스터 스폰 적용
-//사운드이팩트 적용
-//UI 재정비
+//-멈춤버튼
+//-게임오버 리트라이 연결
 //NPC 만들기
 
 //게임 컨셉 부여하기
@@ -256,19 +253,19 @@ public class PlayerCtrl : MonoBehaviour
             GameMgr.Inst.DeHp();
             isMonColl = true;
         }
-        else if(coll.gameObject.name.Contains("Ground")==true)
-        {
-            //JumpCount = 0;
-        }
+        //else if(coll.gameObject.name.Contains("Ground")==true)
+        //{
+        //    //JumpCount = 0;
+        //}
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag.Contains("Obstacle")== true)
         {
+            sfx.PlayOneShot(CollSfx, 0.1f);
             GameMgr.Inst.GameOver();
         }
-        
     }
 
 }
