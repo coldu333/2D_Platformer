@@ -33,6 +33,7 @@ public class GameMgr : MonoBehaviour
     [Header("GamePauseUI")]
     public GameObject GamePausePanel = null;
     public Button Continue_Btn = null;
+    public Button Quit_Btn = null;
 
     [HideInInspector] public int Gold = 0;
     [HideInInspector] public int Score = 0;
@@ -71,11 +72,7 @@ public class GameMgr : MonoBehaviour
             });
 
         if (StopBtn != null)
-            StopBtn.onClick.AddListener(() =>
-            {
-                gameState = GameState.GamePause;
-                GamePausePanel.SetActive(true);
-            });
+            StopBtn.onClick.AddListener(GameStop);
 
         if (Continue_Btn != null)
             Continue_Btn.onClick.AddListener(() =>
@@ -83,11 +80,21 @@ public class GameMgr : MonoBehaviour
                 gameState = GameState.GameIng;
                 GamePausePanel.SetActive(false);
             });
+
+        if (Quit_Btn != null)
+            Quit_Btn.onClick.AddListener(() =>
+            {
+                GamePausePanel.SetActive(false);
+                gameState = GameState.GameEnd;
+            });
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            GameStop();
+
         if (gameState == GameState.GameEnd)
         {
             audioSource.Pause();
@@ -130,6 +137,11 @@ public class GameMgr : MonoBehaviour
             GameOver();
     }
 
+    public void GameStop()
+    {
+        gameState = GameState.GamePause;
+        GamePausePanel.SetActive(true);
+    }
     public void GameOver()
     {
         gameState = GameState.GameEnd;

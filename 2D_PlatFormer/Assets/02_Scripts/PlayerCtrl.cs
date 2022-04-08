@@ -6,18 +6,15 @@ using UnityEngine;
 //버그 : 모서리 부분에서 점프 카운트가 초기화되지 않는 현상
 //버그 : 스킬이 지형에 막혀서 파괴되면 좋겠는데 충돌이 안 되고 있음
 
-//몬스터 설치(완)
-//사운드이팩트 적용(완)
-//UI 재정비(완)
-
-//-멈춤버튼
+//Inventory 만들기
+//상점 만들기
 //-게임오버 리트라이 연결
 //NPC 만들기
 
 //게임 컨셉 부여하기
 //공격(중간 보스부터 구현해줘야겠다.)
 
-
+//클릭이랑 키 입력 둘 다 작동하게 UI를 고쳐야겠다.
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -64,6 +61,9 @@ public class PlayerCtrl : MonoBehaviour
     public AudioClip CollSfx = null;
     AudioSource sfx = null;
 
+    //NPC 상호작용
+    bool isNPC = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -100,6 +100,11 @@ public class PlayerCtrl : MonoBehaviour
         }
         
         MonColl();
+
+        if(isNPC == true && Input.GetKeyDown(KeyCode.Return))
+        {
+            Debug.Log("상인");
+        }
     }
 
     void PlayerMove()
@@ -265,6 +270,18 @@ public class PlayerCtrl : MonoBehaviour
         {
             sfx.PlayOneShot(CollSfx, 0.1f);
             GameMgr.Inst.GameOver();
+        }
+        else if(other.name.Contains("Merchant"))
+        {
+            isNPC = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D coll)
+    {
+        if(coll.name.Contains("Merchant"))
+        {
+            isNPC = false;
         }
     }
 
