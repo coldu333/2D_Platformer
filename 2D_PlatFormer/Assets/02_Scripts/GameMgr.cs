@@ -22,6 +22,14 @@ public class GameMgr : MonoBehaviour
     public Text ScoreText = null;
     public Image HpBarImg = null;
     public Button StopBtn = null;
+    public Button InvenBtn = null;
+
+    //Inventory UI
+    [Header("Inven UI")]
+    public GameObject InvenRoot = null;
+    bool isInven = false;
+    float InvenSpeed = 0;
+    //-350 -592, 46 0
 
     //게임 오버 UI 연결
     [Header("GameOverUI")]
@@ -87,6 +95,14 @@ public class GameMgr : MonoBehaviour
                 GamePausePanel.SetActive(false);
                 gameState = GameState.GameEnd;
             });
+
+        if (InvenBtn != null)
+            InvenBtn.onClick.AddListener(() =>
+            {
+                isInven = !isInven;
+            });
+
+        InvenSpeed = 2000;
     }
 
     // Update is called once per frame
@@ -94,6 +110,9 @@ public class GameMgr : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             GameStop();
+
+        if (Input.GetKeyDown(KeyCode.R))
+            isInven=!isInven;
 
         if (gameState == GameState.GameEnd)
         {
@@ -112,6 +131,15 @@ public class GameMgr : MonoBehaviour
         else if (gameState == GameState.GamePause)
             Time.timeScale = 0.0f;
             
+        if(isInven == true && InvenRoot.transform.position.x <= 365)
+        {
+            InvenRoot.transform.position = new Vector3(InvenRoot.transform.position.x + InvenSpeed * Time.deltaTime,320, 0);
+        }
+        else if(isInven == false && InvenRoot.transform.position.x > -10)
+        {
+            InvenRoot.transform.position = new Vector3(InvenRoot.transform.position.x - InvenSpeed * Time.deltaTime, 320, 0);
+        }
+
     }
     
     public void AddGold(int a_Gold = 10)

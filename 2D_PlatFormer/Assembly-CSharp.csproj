@@ -73,6 +73,7 @@
     <Compile Include="Assets\02_Scripts\PlayerCtrl.cs" />
     <Compile Include="Assets\02_Scripts\SkCtrl.cs" />
     <Compile Include="Assets\04_Images\Simple 2D Platformer BE2\ReadMe\Scripts\ReadmeBE2.cs" />
+    <None Include="Assets\04_Images\FreePixelFood\ReadMe.txt" />
     <None Include="Assets\04_Images\Nature_pixel_art_assets\pixel_snapping_README.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/2019.4.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
