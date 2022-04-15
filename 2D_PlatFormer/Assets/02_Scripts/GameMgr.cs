@@ -54,7 +54,10 @@ public class GameMgr : MonoBehaviour
     float PlayTimer = 0.0f;
 
     //드롭 아이템
+    [Header( "DropItem" )]
     public GameObject CoinPrefab = null;
+    public GameObject ItemPrefab = null;
+    public Sprite[] ItemImgList;
 
     public static GameMgr Inst;
 
@@ -175,9 +178,60 @@ public class GameMgr : MonoBehaviour
         gameState = GameState.GameEnd;
     }
 
-    public void SpawnCoin(Vector3 montr)
+    SpriteRenderer Item_SpRenderer;
+    BoxCollider2D Item_BoxColl;
+    public void SpawnItem(Vector3 montr)
     {
-        GameObject go = (GameObject)Instantiate(CoinPrefab);
-        go.transform.position = montr;
+        int Ratio = Random.Range( 0, 2 ); //50%확률로 코인 드랍 
+        int Rand = Random.Range( 0, 5 );
+        GameObject go;
+
+        if(Ratio == 0)//코인
+        {
+            go = (GameObject)Instantiate( CoinPrefab );
+            go.transform.position = montr;
+        }
+        else //아이템
+        {
+            go = (GameObject)Instantiate( ItemPrefab );
+
+            Item_SpRenderer = go.GetComponent<SpriteRenderer>();
+            Item_SpRenderer.sprite = ItemImgList[Rand];
+
+            Item_BoxColl = go.GetComponent<BoxCollider2D>();
+
+            if(Rand == 0)//고기
+            {
+                go.name += "_Meat";
+                go.transform.localScale = new Vector3(0.45f, 0.45f, 1);
+                Item_BoxColl.offset = new Vector2(0, 0);
+                Item_BoxColl.size = new Vector2(2.2f, 2.2f);
+            }
+            else if(Rand == 1)//과일
+            {
+                go.name += "_Fruit";
+            }
+            else if(Rand == 2)//가죽
+            {
+                go.name += "_Skin";
+                Item_BoxColl.offset = new Vector2( 0, -0.03f );
+                Item_BoxColl.size = new Vector2(1.22f, 1.17f);//( 1, 0.95f );
+            }
+            else if(Rand == 3)//알
+            {
+                go.name += "_Egg";
+                go.transform.localScale = new Vector3( 0.4f, 0.4f, 1 );
+                Item_BoxColl.offset = new Vector2(0, 0.0f);
+                Item_BoxColl.size = new Vector2(1.8f, 2f);
+            }
+            else if(Rand == 4)//다이아
+            {
+                go.name += "_Diamond";
+                go.transform.localScale = new Vector3( 0.4f, 0.4f, 1 );
+                Item_BoxColl.offset = new Vector2( 0, 0.05f );
+                Item_BoxColl.size = new Vector2( 2.2f, 2.1f );
+            }
+            go.transform.position = montr;
+        }
     }
 }

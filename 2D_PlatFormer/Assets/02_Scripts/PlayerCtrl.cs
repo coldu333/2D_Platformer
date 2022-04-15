@@ -7,8 +7,26 @@ using UnityEngine;
 //버그 : 스킬이 지형에 막혀서 파괴되면 좋겠는데 충돌이 안 되고 있음
 
 //Inventory 만들기
+//아이템 종류: 몬스터에게서 떨어진 것들(완)
+//하트, 스킬관련 아이템
+//Inventory 아이템 설명 창
+//Inventroy 아이템 습득 
+//Inventory 아이템 사용
+//사운드 이팩트
+
+//>>아이템 드롭 사이즈 & 콜리더 맞추기(다이아는 더 작게)(완)
+//>>떨어질 때 몬스터가 죽은 위치에서 튕겨나가는 연출을 넣고 싶다.
+//>>바닥에 있을 때 둥실둥실한 연출을 주고 싶다.
+
+//<아이템목록>
+//다이아몬드 : x -4.9 y -3.4 width 65 Height 65 Rotation.z -27.81
+//닭다리 : x -2.47 y 0.9 width 68 Height 70
+//고기(Jerky) :  x -4.9 y 0.9 width 65 Height 65 
+//달걀 : x -2.9 y 0.6 with 65 Height 65
+//과일 : x -6.3 y 3 withd&Height 75
+
 //상점 만들기
-//-게임오버 리트라이 연결
+//게임오버 리트라이 연결
 //NPC 만들기
 
 //게임 컨셉 부여하기
@@ -258,10 +276,31 @@ public class PlayerCtrl : MonoBehaviour
             GameMgr.Inst.DeHp();
             isMonColl = true;
         }
-        //else if(coll.gameObject.name.Contains("Ground")==true)
-        //{
-        //    //JumpCount = 0;
-        //}
+        else if(coll.gameObject.name.Contains("Item")==true)
+        {
+            if(coll.gameObject.name.Contains("Meat"))
+            {
+
+            }
+            else if(coll.gameObject.name.Contains("Fruit"))
+            {
+
+            }
+            else if(coll.gameObject.name.Contains("Skin"))
+            {
+
+            }
+            else if(coll.gameObject.name.Contains("Egg"))
+            {
+
+            }
+            else if(coll.gameObject.name.Contains("Diamond"))
+            {
+
+            }
+            sfx.PlayOneShot(GetSfx, 0.2f);
+            Destroy(coll.gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
